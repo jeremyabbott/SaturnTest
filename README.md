@@ -29,3 +29,9 @@ Unhandled Exception: System.TypeInitializationException: The type initializer fo
 ```
 
 1. It looks like AddGiraffe isn't being called in the ApplicationBuilder. I think this is because the ApplicationState record doesn't have any services, [so when `serviceConfigs` is called, it doesn't have anything to iterate over](https://github.com/SaturnFramework/Saturn/blob/4b6ad1b1ef609f0b8ab203421d5a1136fcf48403/src/Saturn/Application.fs#L61). As a result, trying to serialize/deserialize json fails.
+
+If you try to get an IJsonSerializer from the IServiceProvider instance, it returns null.
+
+`let x = app.Services.GetService(typedefof<Giraffe.Serialization.Json.IJsonSerializer>)`
+
+In the above snippet x is null.

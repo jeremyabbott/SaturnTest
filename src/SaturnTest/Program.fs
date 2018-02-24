@@ -14,14 +14,19 @@ let app = application {
     error_handler (fun ex _ -> pipeline { render_html (InternalError.layout ex) })
     router Router.router
     url "http://0.0.0.0:8085/"
-    memory_cache 
+    memory_cache
     use_static "static"
     use_gzip
     use_config (fun _ -> {connectionString = "DataSource=database.sqlite"} ) //TODO: Set development time configuration
 }
 
+let x = app.Services.GetService(typedefof<Giraffe.Serialization.Json.IJsonSerializer>)
+
 [<EntryPoint>]
 let main _ =
     printfn "Working directory - %s" (System.IO.Directory.GetCurrentDirectory())
+
+    printfn "IJsonSerializer: %A" x
+    printfn "IJsonSerializer: %O" x
     run app
     0 // return an integer exit code
